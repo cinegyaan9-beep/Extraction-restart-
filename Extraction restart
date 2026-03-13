@@ -1,0 +1,73 @@
+import time
+import os
+import random
+
+TOTAL_EXTRACTION_TIME = 32400
+TOTAL_FOLDERS = 56
+START_FOLDER = 14
+CRASH_FOLDER = 15
+
+spinner = ["|","/","-","\\"]
+bar_length = 30
+
+folders = [
+"Images","Videos","Camera","Screenshots","Wallpapers","Downloads","Movies","Music",
+"WhatsApp Images","WhatsApp Videos","WhatsApp Documents","WhatsApp Audio",
+"Telegram Images","Telegram Videos","Telegram Files","Instagram Photos",
+"Instagram Videos","Facebook Photos","Facebook Videos","Snapchat Media",
+"Bluetooth Files","ShareIt Files","Xender Files","Documents",
+"PDF Files","Word Documents","Excel Files","PowerPoint Files",
+"Contacts Backup","Call Recordings","Voice Notes","Ringtones",
+"System Logs","App Cache","Android Data","Android Media",
+"DCIM Camera","Screen Recorder","Screen Captures","Edited Photos",
+"Edited Videos","YouTube Downloads","Netflix Downloads","Prime Video Downloads",
+"Gallery Backup","Cloud Backup","Google Photos Sync","Drive Files",
+"Archive Files","ZIP Files","RAR Files","Temp Files",
+"App Installers","Old Backups","Hidden Media","Trash Bin"
+]
+
+GREEN="\033[92m"
+YELLOW="\033[93m"
+RED="\033[91m"
+RESET="\033[0m"
+
+sleep_time = TOTAL_EXTRACTION_TIME / 200
+
+total_mb = 56000
+downloaded = 0
+
+for index in range(START_FOLDER, CRASH_FOLDER+1):
+
+    folder = folders[index-1]
+
+    for i in range(101):
+
+        downloaded += random.randint(20,80)
+        if downloaded > total_mb:
+            downloaded = total_mb
+
+        spin = spinner[i % len(spinner)]
+
+        os.system("clear")
+
+        print(YELLOW+"┌────────────────────────────────────────────┐")
+        print(f"│ Data transferring to device {spin}")
+        print(f"│ {downloaded} MB / {total_mb} MB")
+        print("└────────────────────────────────────────────┘"+RESET)
+
+        filled = int(bar_length * i // 100)
+        bar = "█"*filled + " "*(bar_length-filled)
+
+        print(GREEN+"┌────────────────────────────────────────────┐")
+        print(f"│ Extracting Folder : {folder}")
+        print(f"│ Folder {index} / {TOTAL_FOLDERS}")
+        print(f"│ [{bar}] {i}%")
+        print("└────────────────────────────────────────────┘"+RESET)
+
+        time.sleep(sleep_time)
+
+        # Folder 15 par crash
+        if index == CRASH_FOLDER and i == 60:
+            os.system("clear")
+            print(RED+"\n✖ ERROR : Extraction File Crash\n"+RESET)
+            exit()
